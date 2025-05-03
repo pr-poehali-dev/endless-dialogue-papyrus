@@ -53,6 +53,13 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Undertale цвета для персонажей */
+    --papyrus-color: 36 100% 50%;
+    --sans-color: 210 100% 70%;
+    --undyne-color: 180 100% 50%;
+    --asgore-color: 0 100% 40%;
+    --chara-color: 0 100% 30%;
   }
 
   .dark {
@@ -102,18 +109,23 @@
   body {
     @apply bg-black text-white;
     font-family: 'Press Start 2P', cursive;
+    image-rendering: pixelated;
   }
 }
 
 /* Стили для диалога в стиле Undertale */
 .undertale-dialog {
   font-family: 'Press Start 2P', cursive;
+  border-width: 5px !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 10px 5px rgba(255, 255, 255, 0.2);
 }
 
 .pixel-text {
   font-family: 'Press Start 2P', cursive;
   line-height: 1.5;
   letter-spacing: 1px;
+  image-rendering: pixelated;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 /* Специальные стили для лучшего отображения пиксельного текста */
@@ -126,12 +138,152 @@
 @keyframes pulse-white {
   0%, 100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.8;
+    transform: scale(0.95);
   }
 }
 
 .pulse-animation {
-  animation: pulse-white 1.5s infinite;
+  animation: pulse-white 1s infinite;
+}
+
+/* Пиксельный фон в стиле Undertale */
+.undertale-game-bg {
+  background-color: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.undertale-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.5;
+}
+
+/* Стили для пиксельного искусства */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Анимация для души (сердца) игрока */
+.soul-pixel-shape {
+  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5);
+}
+
+/* Стили для спрайта Папируса */
+.papyrus-sprite {
+  transition: transform 0.1s ease-in-out;
+}
+
+.papyrus-frame-1 {
+  transform: translateY(-3px);
+}
+
+.papyrus-frame-2 {
+  transform: translateY(3px);
+}
+
+/* Специальные эффекты для текста персонажей */
+.text-sans {
+  font-weight: normal;
+  letter-spacing: -1px;
+}
+
+.text-papyrus, .text-undyne {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.text-asgore {
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+.text-chara {
+  font-style: italic;
+  letter-spacing: 2px;
+}
+
+/* Стили кнопок в стиле Undertale */
+.undertale-button {
+  background: black;
+  border: 4px solid white;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  padding: 10px 15px;
+  transition: all 0.2s;
+}
+
+.undertale-button:hover {
+  background: #333;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Стиль для селектора персонажей */
+.character-selector {
+  border: 4px solid white;
+  background-color: black;
+  box-shadow: 0 0 0 2px #fff, 0 0 10px 5px rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* Анимация для текста персонажей */
+@keyframes shake-text {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(1px);
+  }
+}
+
+.text-undyne, .text-papyrus {
+  animation: shake-text 0.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.is-typing .text-undyne, .is-typing .text-papyrus {
+  animation-play-state: running;
+}
+
+/* Эффект для Чары */
+.text-chara {
+  text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
+}
+
+/* Стили для душ (сердец) из Undertale */
+.soul-red {
+  background-color: #ff0000;
+  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5);
+}
+
+.soul-blue {
+  background-color: #0000ff;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 255, 0.5);
+}
+
+.soul-orange {
+  background-color: #ff8c00;
+  box-shadow: 0 0 10px 2px rgba(255, 140, 0, 0.5);
+}
+
+.soul-green {
+  background-color: #00ff00;
+  box-shadow: 0 0 10px 2px rgba(0, 255, 0, 0.5);
+}
+
+.soul-purple {
+  background-color: #800080;
+  box-shadow: 0 0 10px 2px rgba(128, 0, 128, 0.5);
 }
