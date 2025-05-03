@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Импорт пиксельного шрифта - настоящий шрифт Undertale (8bit Operator) */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @layer base {
@@ -104,6 +105,7 @@
   }
 }
 
+/* Стили для диалога в стиле Undertale */
 .undertale-dialog {
   font-family: 'Press Start 2P', cursive;
 }
@@ -111,4 +113,25 @@
 .pixel-text {
   font-family: 'Press Start 2P', cursive;
   line-height: 1.5;
+  letter-spacing: 1px;
+}
+
+/* Специальные стили для лучшего отображения пиксельного текста */
+.letter-spacing-wide {
+  letter-spacing: 2px;
+  word-spacing: 4px;
+}
+
+/* Пульсирующая анимация для особых элементов */
+@keyframes pulse-white {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-animation {
+  animation: pulse-white 1.5s infinite;
 }

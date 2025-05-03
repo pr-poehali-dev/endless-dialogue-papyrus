@@ -29,7 +29,60 @@ const papyrusResponses: Record<string, string[]> = {
   андайн: [
     "АНДАЙН - МОЙ ТРЕНЕР! ОНА ОЧЕНЬ СИЛЬНАЯ И КРУТАЯ!",
     "ОДНАЖДЫ Я БУДУ ТАКИМ ЖЕ КРУТЫМ КАК АНДАЙН! NYEH HEH HEH!"
+  ],
+  фриск: [
+    "ФРИСК? ЭТО ИМЯ ЗВУЧИТ ЗНАКОМО... ТЫ ТОЖЕ ЧЕЛОВЕК?",
+    "КАКОЕ СОВПАДЕНИЕ, ЧТО МЫ ВСТРЕТИЛИ ЕЩЁ ОДНОГО ЧЕЛОВЕКА! NYEH HEH HEH!"
+  ],
+  монстры: [
+    "МЫ МОНСТРЫ ЖИВЁМ В ПОДЗЕМЕЛЬЕ УЖЕ ОЧЕНЬ ДАВНО!",
+    "КОГДА-НИБУДЬ МЫ ВЫЙДЕМ НА ПОВЕРХНОСТЬ И Я СМОГУ ВОДИТЬ НАСТОЯЩУЮ МАШИНУ!"
+  ],
+  дружба: [
+    "ДРУЖБА - ЭТО ОЧЕНЬ ВАЖНО! Я, ВЕЛИКИЙ ПАПИРУС, ЦЕНЮ СВОИХ ДРУЗЕЙ!",
+    "ТЫ ХОЧЕШЬ СТАТЬ МОИМ ДРУГОМ? NYEH HEH HEH! У ТЕБЯ ОТЛИЧНЫЙ ВКУС!"
+  ],
+  ториэль: [
+    "КОРОЛЕВА ТОРИЭЛЬ? ОНА ОЧЕНЬ ЛЮБИТ УЛИТООК И ГОТОВИТЬ ПИРОГИ!",
+    "ОНА ОЧЕНЬ ДОБРАЯ И ВСЕГДА ЗВОНИТ СПРОСИТЬ, КАК У МЕНЯ ДЕЛА!"
   ]
+};
+
+// Интеллектуальное понимание ввода пользователя
+const getResponseKey = (input: string): string => {
+  const lowerInput = input.toLowerCase();
+  
+  // Словарь синонимов и близких фраз
+  const keywordMap: Record<string, string[]> = {
+    привет: ['привет', 'здравствуй', 'прив', 'хай', 'хеллоу', 'добрый день', 'здравствуйте', 'доброе утро'],
+    спагетти: ['спагетти', 'макароны', 'паста', 'еда', 'готовка', 'готовить', 'кулинария'],
+    санс: ['санс', 'брат', 'скелет', 'каламбур', 'шутки', 'юмор', 'ленивый'],
+    андайн: ['андайн', 'ундайн', 'ундин', 'рыба', 'копье', 'тренер', 'стражник', 'воин'],
+    фриск: ['фриск', 'человек', 'дитя', 'ребенок', 'душа'],
+    монстры: ['монстры', 'подземелье', 'поверхность', 'свобода', 'барьер'],
+    дружба: ['дружба', 'друг', 'друзья', 'дружить', 'товарищ'],
+    ториэль: ['ториэль', 'тори', 'королева', 'пирог', 'мама', 'улитки']
+  };
+  
+  // Проверяем все ключевые слова
+  for (const [key, keywords] of Object.entries(keywordMap)) {
+    if (keywords.some(word => lowerInput.includes(word))) {
+      return key;
+    }
+  }
+  
+  // Анализ общего настроения сообщения
+  if (lowerInput.includes('люблю') || lowerInput.includes('нравится') || lowerInput.includes('круто')) {
+    return 'дружба';
+  }
+  
+  if (lowerInput.includes('?') || lowerInput.includes('что') || lowerInput.includes('как') || lowerInput.includes('почему')) {
+    // Если это вопрос, но мы не знаем на какую тему, выбираем случайный ответ
+    const topics = Object.keys(papyrusResponses);
+    return topics[Math.floor(Math.random() * topics.length)];
+  }
+  
+  return 'default';
 };
 
 const UndertaleDialog = ({ initialMessages, characterName = "PAPYRUS" }: DialogProps) => {
@@ -42,14 +95,29 @@ const UndertaleDialog = ({ initialMessages, characterName = "PAPYRUS" }: DialogP
   const [showInput, setShowInput] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const currentMessage = messages[currentMessageIndex] || "";
   
-  // Эффект печатающегося текста
+  // Функция для воспроизведения звука
+  const playTypingSound = () => {
+    if (audioRef.current) {
+      // Сброс звука для повторного воспроизведения
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(e => console.error("Ошибка воспроизведения звука:", e));
+    }
+  };
+  
+  // Эффект печатающегося текста с озвучкой
   useEffect(() => {
     if (charIndex < currentMessage.length && isTyping) {
       const timeout = setTimeout(() => {
         setDisplayedText(prev => prev + currentMessage[charIndex]);
         setCharIndex(charIndex + 1);
+        
+        // Воспроизводим звук при определенных условиях (не на каждый символ)
+        if (charIndex % 2 === 0 && currentMessage[charIndex].trim() !== '') {
+          playTypingSound();
+        }
       }, 50); // скорость печати
       
       return () => clearTimeout(timeout);
@@ -87,14 +155,7 @@ const UndertaleDialog = ({ initialMessages, characterName = "PAPYRUS" }: DialogP
     const updatedMessages = [...messages, `ТЫ: ${userInput}`];
     
     // Определяем ответ Папируса на сообщение пользователя
-    let responseKey = 'default';
-    
-    // Проверяем ключевые слова в сообщении пользователя
-    const lowerInput = userInput.toLowerCase();
-    if (lowerInput.includes('привет')) responseKey = 'привет';
-    if (lowerInput.includes('спагетти')) responseKey = 'спагетти';
-    if (lowerInput.includes('санс')) responseKey = 'санс';
-    if (lowerInput.includes('андайн')) responseKey = 'андайн';
+    const responseKey = getResponseKey(userInput);
     
     // Выбираем случайный ответ из соответствующей категории
     const possibleResponses = papyrusResponses[responseKey];
@@ -115,6 +176,12 @@ const UndertaleDialog = ({ initialMessages, characterName = "PAPYRUS" }: DialogP
   
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-end p-4 bg-black">
+      {/* Аудио элемент для воспроизведения звуков */}
+      <audio ref={audioRef} className="hidden">
+        <source src="https://assets.codepen.io/5703063/undertale-text.mp3" type="audio/mpeg" />
+        Ваш браузер не поддерживает аудио элемент.
+      </audio>
+      
       <div className="w-full max-w-3xl mb-16">
         {/* Диалоговое окно */}
         <div className="bg-black border-2 border-white p-6 rounded-md text-white relative undertale-dialog">
@@ -126,7 +193,7 @@ const UndertaleDialog = ({ initialMessages, characterName = "PAPYRUS" }: DialogP
           )}
           
           {/* Текст диалога */}
-          <p className="pixel-text text-base leading-relaxed min-h-[6rem]">
+          <p className="pixel-text text-base leading-relaxed min-h-[6rem] letter-spacing-wide">
             {displayedText}
           </p>
           
