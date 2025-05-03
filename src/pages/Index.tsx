@@ -1,16 +1,20 @@
 
-import PapyrusCharacter from '@/components/PapyrusCharacter';
+import UndertaleDialog from '@/components/UndertaleDialog';
+
+const papyrusMessages = [
+  "ПРИВЕТСТВУЮ, ЧЕЛОВЕК! Я ВЕЛИКИЙ ПАПИРУС!",
+  "NYEH HEH HEH! КАКАЯ ПРЕКРАСНАЯ ВСТРЕЧА!",
+  "ТЫ ВЫГЛЯДИШЬ ТАК, БУДТО ХОЧЕШЬ ПОГОВОРИТЬ С КУЛИНАРНЫМ ГЕНИЕМ!",
+  "ЗНАЕШЬ ЛИ ТЫ, ЧТО Я ЭКСПЕРТ В ПРИГОТОВЛЕНИИ СПАГЕТТИ?",
+  "МОИ КУЛИНАРНЫЕ СПОСОБНОСТИ ДАЖЕ ЗАСТАВЛЯЮТ АНДАЙН ПОТЕТЬ ОТ ЗАВИСТИ!",
+  "ХМММ, ТЫ НЕ ОЧЕНЬ РАЗГОВОРЧИВ, НЕ ТАК ЛИ?",
+  "МОЖЕТ БЫТЬ, ТЫ ХОЧЕШЬ СКАЗАТЬ ЧТО-ТО ВЕЛИКОМУ ПАПИРУСУ?"
+];
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-purple-900 flex flex-col items-center justify-center">
-      <div className="fixed top-10 text-center z-0">
-        <h1 className="text-4xl font-bold mb-4 text-white">Диалог в стиле Undertale</h1>
-        <p className="text-xl text-purple-200">Нажмите в любом месте экрана, чтобы продолжить диалог</p>
-      </div>
-      
-      {/* Компонент Папируса с диалоговым окном */}
-      <PapyrusCharacter />
+    <div className="min-h-screen bg-black">
+      <UndertaleDialog initialMessages={papyrusMessages} characterName="PAPYRUS" />
     </div>
   );
 };

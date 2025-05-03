@@ -1,6 +1,9 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @layer base {
   :root {
@@ -96,6 +99,16 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-white;
+    font-family: 'Press Start 2P', cursive;
   }
+}
+
+.undertale-dialog {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.pixel-text {
+  font-family: 'Press Start 2P', cursive;
+  line-height: 1.5;
 }
